@@ -1,25 +1,49 @@
-import styled from 'styled-components';
+import { Avatar, IconButton, Toolbar, Typography } from '@mui/material';
+import MuiAppBar from '@mui/material/AppBar';
+import { styled } from '@mui/material/styles';
+import { Defaults } from '../constants/Defaults';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import tmsLogo from '../assets/images/tms-topbar-logo.png';
+import { deepPurple } from '@mui/material/colors';
 
-function TopNav() {
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
+  transition: theme.transitions.create(['margin', 'width'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    width: `calc(100% - ${Defaults.DRAWER_WIDTH}px)`,
+    marginLeft: `${Defaults.DRAWER_WIDTH}px`,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+function TopNav({ open, handleDrawerOpen }) {
   return (
-    <StyledContainer>
-      <StyledLogo alt="tmsLogo" src={tmsLogo} />
-    </StyledContainer>
+    <AppBar color="secondary" position="fixed" open={open}>
+      <Toolbar>
+        <IconButton
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          edge="start"
+          sx={{ mr: 2, ...(open && { display: 'none' }) }}
+        >
+          <ChevronRightIcon />
+        </IconButton>
+        <img alt="tmsLogo" src={tmsLogo} />
+        <span style={{ flex: 1 }}></span>
+        <Avatar sx={{ bgcolor: deepPurple[500] }}>OP</Avatar>
+        <span style={{ margin: '0 15px' }}>
+          <Typography variant="body" component="span" gutterBottom>
+            John Doe
+          </Typography>
+        </span>
+      </Toolbar>
+    </AppBar>
   );
 }
-
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 64px;
-  filter: drop-shadow(0px 1px 1px rgba(70, 70, 70, 0.1));
-`;
-
-const StyledLogo = styled.img`
-  margin: 16px 21px;
-  height: 34px;
-`;
-
 export default TopNav;
