@@ -4,8 +4,10 @@ import { useState } from 'react';
 import SideBar from '../components/Sidebar';
 import TabBar from '../components/TabBar';
 import { Defaults } from '../constants/Defaults';
+import List from './list/List';
 import Map from './map/Map';
 import TopNav from './TopNav';
+import { Route, Routes } from 'react-router-dom';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -62,7 +64,10 @@ function MainContent() {
         <div style={Styles.tabBar}>
           <TabBar itemOptions={tabItems} />
         </div>
-        <Map />
+        <Routes>
+          <Route path="/" element={<Map />} />
+          <Route path="/list" element={<List />} />
+        </Routes>
       </Main>
     </Box>
   );
