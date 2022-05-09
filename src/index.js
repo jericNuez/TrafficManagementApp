@@ -4,16 +4,17 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createTheme, ThemeProvider } from '@mui/material';
+import { Colors } from './constants/Colors';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1A1A1A',
+      main: Colors.primary,
     },
     secondary: {
-      main: '#ffffff',
+      main: Colors.secondary,
     },
   },
 });
