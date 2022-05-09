@@ -36,7 +36,7 @@ function TopNav({ open, handleDrawerOpen }) {
         </IconButton>
         <img alt="tmsLogo" src={tmsLogo} />
         <span style={{ flex: 1 }}></span>
-        <Avatar sx={{ bgcolor: deepPurple[500] }}>OP</Avatar>
+        <Avatar sx={{ bgcolor: deepPurple[500] }}>JD</Avatar>
         <span style={{ margin: '0 15px' }}>
           <Typography variant="body" component="span" gutterBottom>
             John Doe
