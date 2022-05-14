@@ -9,6 +9,9 @@ import Map from './map/Map';
 import TopNav from './TopNav';
 import { Route, Routes } from 'react-router-dom';
 import Grid from './grid/Grid';
+import Login from './login/Login';
+import { auth } from '../firebase.js';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -43,6 +46,7 @@ const linkItems = ['/', '/list', '/grid'];
 function MainContent() {
   const theme = useTheme();
   const [open, setOpen] = useState(true);
+  const [user] = useAuthState(auth);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -54,24 +58,30 @@ function MainContent() {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <TopNav open={open} handleDrawerOpen={handleDrawerOpen} />
-      <SideBar
-        theme={theme}
-        open={open}
-        handleDrawerClose={handleDrawerClose}
-      />
-      <Main open={open}>
-        <DrawerHeader />
-        <div style={Styles.tabBar}>
-          <TabBar itemOptions={tabItems} linkItems={linkItems} />
-        </div>
-        <Routes>
-          <Route path="/" element={<Map />} />
-          <Route path="/list" element={<List />} />
-          <Route path="/grid" element={<Grid />} />
-        </Routes>
-      </Main>
+      {user ? (
+        <>
+          <CssBaseline />
+          <TopNav open={open} handleDrawerOpen={handleDrawerOpen} />
+          <SideBar
+            theme={theme}
+            open={open}
+            handleDrawerClose={handleDrawerClose}
+          />
+          <Main open={open}>
+            <DrawerHeader />
+            <div style={Styles.tabBar}>
+              <TabBar itemOptions={tabItems} linkItems={linkItems} />
+            </div>
+            <Routes>
+              <Route path="/" element={<Map />} />
+              <Route path="/list" element={<List />} />
+              <Route path="/grid" element={<Grid />} />
+            </Routes>
+          </Main>
+        </>
+      ) : (
+        <Login />
+      )}
     </Box>
   );
 }

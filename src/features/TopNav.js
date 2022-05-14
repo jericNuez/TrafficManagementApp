@@ -1,6 +1,5 @@
-import { IconButton, Toolbar } from '@mui/material';
+import { Avatar, IconButton, Toolbar, Typography } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { styled } from '@mui/material/styles';
@@ -8,6 +7,7 @@ import { Defaults } from '../constants/Defaults';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import tmsLogo from '../assets/images/tms-topbar-logo.png';
 import { useState } from 'react';
+import { auth } from '../firebase.js';
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -26,7 +26,6 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 function TopNav({ open, handleDrawerOpen }) {
-  const [auth] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,6 +33,11 @@ function TopNav({ open, handleDrawerOpen }) {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  // Signout function
+  const logout = () => {
+    auth.signOut();
   };
 
   return (
@@ -49,38 +53,41 @@ function TopNav({ open, handleDrawerOpen }) {
         </IconButton>
         <img alt="tmsLogo" src={tmsLogo} />
         <span style={{ flex: 1 }}></span>
-        {auth && (
-          <div>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem>Jeric Nuez</MenuItem>
-              <MenuItem onClick={handleClose}>Sign-Out</MenuItem>
-            </Menu>
-          </div>
-        )}
+        <div>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="inherit"
+          >
+            <Avatar
+              alt={auth.currentUser.displayName}
+              src={auth.currentUser.photoURL}
+            />
+          </IconButton>
+          <Typography variant="body2" component="span">
+            {auth.currentUser.displayName}
+          </Typography>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={logout}>Sign-Out</MenuItem>
+          </Menu>
+        </div>
       </Toolbar>
     </AppBar>
   );
