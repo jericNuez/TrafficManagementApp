@@ -16,6 +16,9 @@ const theme = createTheme({
     secondary: {
       main: Colors.secondary,
     },
+    textColor: {
+      main: Colors.textColor,
+    },
   },
 });
 
