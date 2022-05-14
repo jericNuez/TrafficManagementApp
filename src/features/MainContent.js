@@ -8,6 +8,7 @@ import List from './list/List';
 import Map from './map/Map';
 import TopNav from './TopNav';
 import { Route, Routes } from 'react-router-dom';
+import Grid from './grid/Grid';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -36,7 +37,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-const tabItems = ['Map', 'List', 'Grid', 'Evaluation'];
+const tabItems = ['Map', 'List', 'Grid'];
+const linkItems = ['/', '/list', '/grid'];
 
 function MainContent() {
   const theme = useTheme();
@@ -62,11 +64,12 @@ function MainContent() {
       <Main open={open}>
         <DrawerHeader />
         <div style={Styles.tabBar}>
-          <TabBar itemOptions={tabItems} />
+          <TabBar itemOptions={tabItems} linkItems={linkItems} />
         </div>
         <Routes>
           <Route path="/" element={<Map />} />
           <Route path="/list" element={<List />} />
+          <Route path="/grid" element={<Grid />} />
         </Routes>
       </Main>
     </Box>
@@ -75,7 +78,7 @@ function MainContent() {
 
 const Styles = {
   tabBar: {
-    position: 'absolute',
+    position: 'fixed',
     top: '64px',
     right: 0,
     zIndex: 401,
