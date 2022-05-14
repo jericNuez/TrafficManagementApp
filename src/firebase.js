@@ -1,9 +1,12 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
+import 'firebase/compat/database';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCJl-TPic69Ly6Gq9qxWOaVwmbRvAksFFQ',
   authDomain: 'traffic-management-app-3c1a3.firebaseapp.com',
+  databaseURL:
+    'https://traffic-management-app-3c1a3-default-rtdb.asia-southeast1.firebasedatabase.app',
   projectId: 'traffic-management-app-3c1a3',
   storageBucket: 'traffic-management-app-3c1a3.appspot.com',
   messagingSenderId: '570437328758',
@@ -13,5 +16,6 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 var auth = firebase.auth();
+var database = firebase.database();
 var provider = new firebase.auth.GoogleAuthProvider();
-export { auth, provider };
+export { auth, provider, database };

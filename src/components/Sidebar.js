@@ -3,7 +3,6 @@ import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Defaults } from '../constants/Defaults';
 import {
   Box,
@@ -28,7 +27,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 const reviewStatusOptions = ['Unreviewed', 'Reviewed', 'Approved', 'Rejected'];
 
-function SideBar({ theme, open, handleDrawerClose }) {
+function SideBar({ open, handleDrawerClose }) {
   return (
     <Drawer
       sx={{
@@ -45,11 +44,7 @@ function SideBar({ theme, open, handleDrawerClose }) {
     >
       <DrawerHeader>
         <IconButton onClick={handleDrawerClose}>
-          {theme.direction === 'ltr' ? (
-            <ChevronLeftIcon />
-          ) : (
-            <ChevronRightIcon />
-          )}
+          <ChevronLeftIcon />
         </IconButton>
       </DrawerHeader>
       <Divider />
@@ -58,7 +53,6 @@ function SideBar({ theme, open, handleDrawerClose }) {
           sx={{ fontWeight: 'bold' }}
           variant="subtitle1"
           component="div"
-          gutterBotttom
         >
           Event Types
         </Typography>
@@ -80,7 +74,6 @@ function SideBar({ theme, open, handleDrawerClose }) {
           sx={{ fontWeight: 'bold' }}
           variant="subtitle1"
           component="div"
-          gutterBotttom
         >
           Review Status
         </Typography>
@@ -95,7 +88,6 @@ function SideBar({ theme, open, handleDrawerClose }) {
           sx={{ fontWeight: 'bold' }}
           variant="subtitle1"
           component="div"
-          gutterBotttom
         >
           Time of Day
         </Typography>
@@ -106,7 +98,6 @@ function SideBar({ theme, open, handleDrawerClose }) {
           sx={{ fontWeight: 'bold' }}
           variant="subtitle1"
           component="div"
-          gutterBotttom
         >
           Date Range
         </Typography>

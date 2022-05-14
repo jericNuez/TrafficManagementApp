@@ -1,0 +1,8 @@
+.form-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: calc(100vh - 64px);
+  padding-top: 75px;
+}
