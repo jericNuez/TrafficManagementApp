@@ -1,7 +1,9 @@
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
+  Grid,
   InputLabel,
   MenuItem,
   Modal,
@@ -13,6 +15,11 @@ import {
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AddEvent.css';
+import { styled } from '@mui/material/styles';
+import imagePlaceholder from '../../assets/images/image-placeholder.png';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
 import {
   MapContainer,
   Marker,
@@ -23,6 +30,7 @@ import {
 import iconMarker from 'leaflet/dist/images/marker-icon.png';
 import L from 'leaflet';
 import firebaseService from '../../services/firebase/firebase-service';
+import { storage } from '../../firebase';
 const icon = L.icon({ iconUrl: iconMarker });
 
 function AddEvent() {
@@ -30,6 +38,9 @@ function AddEvent() {
   const [description, setDescription] = useState('');
   const [eventType, setEventType] = useState('');
   const [location, setLocation] = useState([]);
+  const [image, setImage] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [percent, setPercent] = useState(100);
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const handleOpen = () => setOpenModal(true);
@@ -56,11 +67,13 @@ function AddEvent() {
       eventType: eventType,
       location: location,
       timeStamp: new Date().getTime(),
+      imageUrl: imageUrl,
     };
     firebaseService
       .create(data)
       .then(() => {
         clearForm();
+        navigate('/list', { replace: true });
       })
       .catch((e) => {
         console.log(e);
@@ -73,6 +86,46 @@ function AddEvent() {
     setEventType('');
     setLocation([]);
     setSelectedPosition(center);
+    setImage(null);
+    setImageUrl(null);
+  };
+
+  const handleUpload = () => {
+    if (!image) {
+      alert('Please upload an image first!');
+    }
+
+    const uploadTask = storage.ref(`/images/${image.name}`).put(image);
+    //initiates the firebase side uploading
+    uploadTask.on(
+      'state_changed',
+      (snapShot) => {
+        //takes a snap shot of the process as it is happening
+        const uploadPercentage = Math.round(
+          (snapShot.bytesTransferred / snapShot.totalBytes) * 100
+        );
+        setPercent(uploadPercentage);
+        if (uploadPercentage === 100) {
+          setImage(null);
+          setImageUrl(null);
+        }
+      },
+      (err) => {
+        //catches the errors
+        console.log(err);
+      },
+      () => {
+        // gets the functions from storage refences the image storage in firebase by the children
+        // gets the download url then sets the image from firebase as the value for the imgUrl key:
+        storage
+          .ref('images')
+          .child(image.name)
+          .getDownloadURL()
+          .then((fireBaseUrl) => {
+            setImageUrl(fireBaseUrl);
+          });
+      }
+    );
   };
 
   return (
@@ -83,65 +136,137 @@ function AddEvent() {
           position: 'absolute',
         }}
       >
-        <Button onClick={() => navigate('/list')} variant="outlined">
+        <Button
+          onClick={() => navigate('/list', { replace: true })}
+          variant="outlined"
+        >
           Back
         </Button>
       </Box>
-      <div className="form-container ">
-        <form onSubmit={SaveEvent} autoComplete="off">
-          <Stack spacing={2}>
-            <Typography
-              sx={{ fontWeight: 'bold', textAlign: 'center' }}
-              variant="h5"
-              gutterBottom
-              component="div"
-            >
-              Add new event
-            </Typography>
-
-            <TextField
-              id="plateNo"
-              label="Plate Number"
-              variant="outlined"
-              value={plateNumber}
-              required
-              onChange={(e) => setPlateNumber(e.target.value)}
-            />
-            <TextField
-              id="description"
-              label="Description"
-              variant="outlined"
-              value={description}
-              required
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <FormControl fullWidth>
-              <InputLabel id="eventTypeIdLabel">Event Type</InputLabel>
-              <Select
-                labelId="eventTypeId"
-                id="eventTypeId"
-                label="eventType"
-                value={eventType}
-                onChange={handleChangeEventType}
+      <div className="form-container">
+        <form
+          style={{ width: '600px' }}
+          onSubmit={SaveEvent}
+          autoComplete="off"
+        >
+          <Card sx={{ minWidth: 275 }}>
+            <CardContent>
+              <Typography
+                sx={{ fontWeight: 'bold', textAlign: 'center' }}
+                variant="h5"
+                gutterBottom
+                component="div"
+                color="textColor"
               >
-                <MenuItem value="Illegal Parking">Illegal Parking</MenuItem>
-                <MenuItem value="Reckless Driving">Reckless Driving</MenuItem>
-                <MenuItem value="Overspeeding">Overspeeding</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              id="location"
-              label="Location"
-              variant="outlined"
-              value={location}
-              required
-              onClick={handleOpen}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-            <Button type="submit" variant="contained">
-              Save
-            </Button>
-          </Stack>
+                ADD NEW EVENT
+              </Typography>
+              <Grid container rowSpacing={1} columnSpacing={1}>
+                <Grid item xs={6}>
+                  <Stack spacing={2}>
+                    <TextField
+                      id="plateNo"
+                      label="Plate Number"
+                      variant="outlined"
+                      value={plateNumber}
+                      required
+                      onChange={(e) => setPlateNumber(e.target.value)}
+                    />
+                    <TextField
+                      id="description"
+                      label="Description"
+                      variant="outlined"
+                      value={description}
+                      required
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                    <FormControl fullWidth>
+                      <InputLabel id="eventTypeIdLabel">Event Type</InputLabel>
+                      <Select
+                        labelId="eventTypeId"
+                        id="eventTypeId"
+                        label="eventType"
+                        value={eventType}
+                        onChange={handleChangeEventType}
+                      >
+                        <MenuItem value="Illegal Parking">
+                          Illegal Parking
+                        </MenuItem>
+                        <MenuItem value="Reckless Driving">
+                          Reckless Driving
+                        </MenuItem>
+                        <MenuItem value="Overspeeding">Overspeeding</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <TextField
+                      id="location"
+                      label="Location"
+                      variant="outlined"
+                      value={location}
+                      required
+                      onClick={handleOpen}
+                      onChange={(e) => setLocation(e.target.value)}
+                    />
+                  </Stack>
+                </Grid>
+                <Grid item xs={6}>
+                  <Stack spacing={2}>
+                    <label
+                      style={{ textAlign: 'center' }}
+                      htmlFor="contained-button-file"
+                    >
+                      <Input
+                        accept="image/*"
+                        id="contained-button-file"
+                        type="file"
+                        onChange={(e) => {
+                          setImage(e.target.files[0]);
+                        }}
+                      />
+                      <img
+                        alt="imagePrev"
+                        id="imagePreview"
+                        style={{ width: '100%' }}
+                        src={
+                          image
+                            ? URL.createObjectURL(image)
+                            : imageUrl
+                            ? imageUrl
+                            : imagePlaceholder
+                        }
+                      />
+                      {!imageUrl && 'Click Image to Browse file'}
+                    </label>
+                    {image && (
+                      <Button
+                        variant="contained"
+                        color="warning"
+                        disabled={percent < 100}
+                        component="span"
+                        onClick={handleUpload}
+                      >
+                        Upload
+                      </Button>
+                    )}
+                    {percent !== 100 && (
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <CircularProgress />
+                      </Box>
+                    )}
+                  </Stack>
+                </Grid>
+              </Grid>
+            </CardContent>
+            <CardActions>
+              <Button
+                sx={{ width: '100%' }}
+                disabled={!imageUrl}
+                type="submit"
+                variant="contained"
+              >
+                Save
+              </Button>
+            </CardActions>
+          </Card>
         </form>
       </div>
       <Modal
@@ -202,5 +327,9 @@ const modalStyle = {
   boxShadow: 24,
   p: 6,
 };
+
+const Input = styled('input')({
+  display: 'none',
+});
 
 export default AddEvent;

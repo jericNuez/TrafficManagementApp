@@ -11,21 +11,22 @@ function Map() {
   const [data, setData] = useState([]);
   useEffect(() => {
     firebaseService.getAll().on('value', (snapshot) => {
-      snapshot.forEach((data) => {
-        const dataVal = data.val();
-        setData((prev) => {
-          return [
-            ...prev,
-            {
-              id: data.key,
-              plateNumber: dataVal.plateNumber,
-              description: dataVal.description,
-              eventType: dataVal.eventType,
-              location: dataVal.location,
-            },
-          ];
+      snapshot &&
+        snapshot.forEach((data) => {
+          const dataVal = data.val();
+          setData((prev) => {
+            return [
+              ...prev,
+              {
+                id: data.key,
+                plateNumber: dataVal.plateNumber,
+                description: dataVal.description,
+                eventType: dataVal.eventType,
+                location: dataVal.location,
+              },
+            ];
+          });
         });
-      });
     });
   }, []);
   return (
