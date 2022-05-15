@@ -10,7 +10,7 @@ function Map() {
   const center = [14.487058, 121.045028];
   const [data, setData] = useState([]);
   useEffect(() => {
-    firebaseService.getAll().on('value', (snapshot) => {
+    firebaseService.getAll().once('value', (snapshot) => {
       snapshot &&
         snapshot.forEach((data) => {
           const dataVal = data.val();

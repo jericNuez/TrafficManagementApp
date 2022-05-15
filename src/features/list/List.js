@@ -38,27 +38,27 @@ function List() {
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    const fetch = firebaseService.getAll().on('value', (snapshot) => {
-      snapshot &&
-        snapshot.forEach((data) => {
-          const dataVal = data.val();
-          setRows((prev) => {
-            return [
-              ...prev,
-              {
-                id: data.key,
-                plateNumber: dataVal.plateNumber,
-                description: dataVal.description,
-                eventType: dataVal.eventType,
-                location: dataVal.location,
-                timeStamp: new Date(dataVal.timeStamp).toLocaleDateString(),
-              },
-            ];
-          });
+    const fetch = firebaseService.getAll().once('value', (snapshot) => {
+      snapshot.forEach((data) => {
+        const dataVal = data.val();
+        setRows((prev) => {
+          return [
+            ...prev,
+            {
+              id: data.key,
+              plateNumber: dataVal.plateNumber,
+              description: dataVal.description,
+              eventType: dataVal.eventType,
+              location: dataVal.location,
+              timeStamp: new Date(dataVal.timeStamp).toLocaleDateString(),
+            },
+          ];
         });
+      });
     });
-    return () => fetch();
+    return () => fetch;
   }, []);
+
   return (
     <>
       <Box

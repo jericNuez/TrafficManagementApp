@@ -10,15 +10,17 @@ function TabBar({ itemOptions, size, textSize, linkItems }) {
   const [selected, setSelected] = useState(itemOptions[0]);
 
   const handleChange = (_event, itemSelected) => {
-    const link = linkItems[itemOptions.indexOf(itemSelected)];
     if (linkItems) {
+      const link = linkItems[itemOptions.indexOf(itemSelected)];
       navigate(link, { replace: true });
     }
     itemSelected !== null && setSelected(itemSelected);
   };
 
   useEffect(() => {
-    linkItems && setSelected(itemOptions[linkItems.indexOf(location.pathname)]);
+    linkItems &&
+      location.pathname !== null &&
+      setSelected(itemOptions[linkItems.indexOf(location.pathname)]);
   }, [location.pathname, linkItems, itemOptions]);
 
   return (

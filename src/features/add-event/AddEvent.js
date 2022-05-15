@@ -75,7 +75,6 @@ function AddEvent() {
       .then(() => {
         clearForm();
         Swal.fire({
-          position: 'bottom-end',
           icon: 'success',
           text: 'Successfully added new event.',
           showConfirmButton: false,

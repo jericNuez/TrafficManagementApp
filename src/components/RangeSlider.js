@@ -7,7 +7,7 @@ function valuetext(value) {
 }
 
 function RangeSlider() {
-  const [value, setValue] = useState([20, 37]);
+  const [value, setValue] = useState([0, 23]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -17,6 +17,7 @@ function RangeSlider() {
       <Slider
         getAriaLabel={() => 'Time range'}
         value={value}
+        max={24}
         onChange={handleChange}
         valueLabelDisplay="auto"
         getAriaValueText={valuetext}

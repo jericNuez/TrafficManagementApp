@@ -15,7 +15,7 @@ function Grid() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const fetch = firebaseService.getAll().on('value', (snapshot) => {
+    const fetch = firebaseService.getAll().once('value', (snapshot) => {
       snapshot &&
         snapshot.forEach((data) => {
           const dataVal = data.val();
@@ -35,7 +35,7 @@ function Grid() {
           });
         });
     });
-    return () => fetch();
+    return () => fetch;
   }, []);
 
   return (

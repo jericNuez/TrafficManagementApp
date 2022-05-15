@@ -12,7 +12,6 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import TabBar from './TabBar';
 import RangeSlider from './RangeSlider';
 import CustomDatePicker from './CustomDatePicker';
 
@@ -24,8 +23,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
   justifyContent: 'flex-end',
 }));
-
-const reviewStatusOptions = ['Unreviewed', 'Reviewed', 'Approved', 'Rejected'];
 
 function SideBar({ open, handleDrawerClose }) {
   return (
@@ -58,18 +55,40 @@ function SideBar({ open, handleDrawerClose }) {
         </Typography>
         <FormGroup sx={{ alignItems: 'start' }}>
           <FormControlLabel
-            control={<Checkbox defaultChecked />}
+            control={
+              <Checkbox
+                onChange={(e) => (localStorage.overSpeeding = e.target.checked)}
+                defaultChecked
+              />
+            }
             labelPlacement="start"
-            label="Sidewalk"
+            label="Overspeeding"
           />
           <FormControlLabel
-            control={<Checkbox />}
+            control={
+              <Checkbox
+                onChange={(e) =>
+                  (localStorage.illegalParking = e.target.checked)
+                }
+              />
+            }
             labelPlacement="start"
             label="Illegal Parking"
           />
+          <FormControlLabel
+            control={
+              <Checkbox
+                onChange={(e) =>
+                  (localStorage.recklessDriving = e.target.checked)
+                }
+              />
+            }
+            labelPlacement="start"
+            label="Reckless Driving"
+          />
         </FormGroup>
       </Box>
-      <Box sx={{ margin: '23px' }}>
+      {/* <Box sx={{ margin: '23px' }}>
         <Typography
           sx={{ fontWeight: 'bold' }}
           variant="subtitle1"
@@ -82,8 +101,8 @@ function SideBar({ open, handleDrawerClose }) {
           textSize="10px"
           itemOptions={reviewStatusOptions}
         />
-      </Box>
-      <Box sx={{ margin: '23px' }}>
+      </Box> */}
+      {/* <Box sx={{ margin: '23px' }}>
         <Typography
           sx={{ fontWeight: 'bold' }}
           variant="subtitle1"
@@ -92,7 +111,7 @@ function SideBar({ open, handleDrawerClose }) {
           Time of Day
         </Typography>
         <RangeSlider />
-      </Box>
+      </Box> */}
       <Box sx={{ margin: '23px' }}>
         <Typography
           sx={{ fontWeight: 'bold' }}
@@ -101,13 +120,25 @@ function SideBar({ open, handleDrawerClose }) {
         >
           Date Range
         </Typography>
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1, mt: 1 }}>
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <CustomDatePicker label="Start Date" />
+              <CustomDatePicker
+                onChangeValue={(value) =>
+                  (localStorage.startDate = new Date(
+                    value
+                  ).toLocaleDateString())
+                }
+                label="Start Date"
+              />
             </Grid>
             <Grid item xs={6}>
-              <CustomDatePicker label="End Date" />
+              <CustomDatePicker
+                onChangeValue={(value) =>
+                  (localStorage.endDate = new Date(value).toLocaleDateString())
+                }
+                label="End Date"
+              />
             </Grid>
           </Grid>
         </Box>
