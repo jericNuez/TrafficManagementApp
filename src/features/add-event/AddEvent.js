@@ -20,6 +20,7 @@ import imagePlaceholder from '../../assets/images/image-placeholder.png';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import Swal from 'sweetalert2';
 import {
   MapContainer,
   Marker,
@@ -73,6 +74,13 @@ function AddEvent() {
       .create(data)
       .then(() => {
         clearForm();
+        Swal.fire({
+          position: 'bottom-end',
+          icon: 'success',
+          text: 'Successfully added new event.',
+          showConfirmButton: false,
+          timer: 1500,
+        });
         navigate('/list', { replace: true });
       })
       .catch((e) => {
