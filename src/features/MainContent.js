@@ -10,6 +10,7 @@ import TopNav from './TopNav';
 import { Route, Routes } from 'react-router-dom';
 import Grid from './grid/Grid';
 import Login from './login/Login';
+import Register from './registration/Register';
 import { auth } from '../firebase.js';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import AddEvent from './add-event/AddEvent';
@@ -69,15 +70,18 @@ function MainContent() {
               <TabBar itemOptions={tabItems} linkItems={linkItems} />
             </div>
             <Routes>
-              <Route path="/" element={<Map />} />
-              <Route path="/list" element={<List />} />
-              <Route path="/grid" element={<Grid />} />
-              <Route path="/list/add-event" element={<AddEvent />} />
+              <Route path="*" element={<Map />} />
+              <Route path="/list" exact element={<List />} />
+              <Route path="/grid" exact element={<Grid />} />
+              <Route path="/list/add-event" exact element={<AddEvent />} />
             </Routes>
           </Main>
         </>
       ) : (
-        <Login />
+        <Routes>
+          <Route path="*" element={<Login />} />
+          <Route path="/sign-up" exact element={<Register />} />
+        </Routes>
       )}
     </Box>
   );

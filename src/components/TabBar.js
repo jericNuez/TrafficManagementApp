@@ -18,9 +18,7 @@ function TabBar({ itemOptions, size, textSize, linkItems }) {
   };
 
   useEffect(() => {
-    linkItems &&
-      location.pathname &&
-      setSelected(itemOptions[linkItems.indexOf(location.pathname)]);
+    linkItems && setSelected(itemOptions[linkItems.indexOf(location.pathname)]);
   }, [location.pathname, linkItems, itemOptions]);
 
   return (

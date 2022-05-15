@@ -44,8 +44,8 @@ function Grid() {
         {data.map((item) => (
           <ImageListItem key={item.id}>
             <img
-              src={`${item.imageUrl}?w=248&fit=crop&auto=format`}
-              srcSet={`${item.imageUrl}?w=248&fit=crop&auto=format&dpr=2 2x`}
+              src={`${item.imageUrl}?w=164&h=164&fit=crop&auto=format`}
+              srcSet={`${item.imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
               alt={item.plateNumber}
               loading="lazy"
             />

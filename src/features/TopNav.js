@@ -8,6 +8,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import tmsLogo from '../assets/images/tms-topbar-logo.png';
 import { useState } from 'react';
 import { auth } from '../firebase.js';
+import { useNavigate } from 'react-router-dom';
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -26,6 +27,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 function TopNav({ open, handleDrawerOpen }) {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -36,8 +38,9 @@ function TopNav({ open, handleDrawerOpen }) {
   };
 
   // Signout function
-  const logout = () => {
-    auth.signOut();
+  const logout = async () => {
+    await auth.signOut();
+    navigate('/login', { replace: true });
   };
 
   return (
@@ -68,7 +71,7 @@ function TopNav({ open, handleDrawerOpen }) {
             />
           </IconButton>
           <Typography variant="body2" component="span">
-            {auth.currentUser.displayName}
+            {auth.currentUser.displayName || auth.currentUser.email}
           </Typography>
           <Menu
             id="menu-appbar"
