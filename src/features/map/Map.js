@@ -1,19 +1,62 @@
 import './Map.css';
-import { MapContainer } from 'react-leaflet/MapContainer';
-import { TileLayer } from 'react-leaflet/TileLayer';
-import { Marker, Popup } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
+import iconMarker from 'leaflet/dist/images/marker-icon.png';
+import L from 'leaflet';
+import firebaseService from '../../services/firebase/firebase-service';
+import { useEffect, useState } from 'react';
+const icon = L.icon({ iconUrl: iconMarker });
 function Map() {
+  const center = [14.487058, 121.045028];
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    firebaseService.getAll().once('value', (snapshot) => {
+      snapshot &&
+        snapshot.forEach((data) => {
+          const dataVal = data.val();
+          setData((prev) => {
+            return [
+              ...prev,
+              {
+                id: data.key,
+                plateNumber: dataVal.plateNumber,
+                description: dataVal.description,
+                eventType: dataVal.eventType,
+                location: dataVal.location,
+              },
+            ];
+          });
+        });
+    });
+  }, []);
   return (
-    <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
+    <MapContainer center={center} zoom={13} scrollWheelZoom={true}>
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={[51.505, -0.09]}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker>
+      <MarkerClusterGroup chunkedLoading>
+        {data.map((value, index) => {
+          return (
+            <Marker key={index} position={value.location} icon={icon}>
+              <Popup>
+                <div>
+                  <span>
+                    <b>PLATE NUMBER: </b>
+                  </span>
+                  {value.plateNumber}
+                </div>
+                <div>
+                  <span>
+                    <b>EVENT TYPE: </b>
+                  </span>
+                  {value.eventType}
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
+      </MarkerClusterGroup>
     </MapContainer>
   );
 }

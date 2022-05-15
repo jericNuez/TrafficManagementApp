@@ -1,11 +1,12 @@
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { Colors } from '../constants/Colors';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function TabBar({ itemOptions, size, textSize, linkItems }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [selected, setSelected] = useState(itemOptions[0]);
 
   const handleChange = (_event, itemSelected) => {
@@ -13,8 +14,14 @@ function TabBar({ itemOptions, size, textSize, linkItems }) {
       const link = linkItems[itemOptions.indexOf(itemSelected)];
       navigate(link, { replace: true });
     }
-    setSelected(itemSelected);
+    itemSelected !== null && setSelected(itemSelected);
   };
+
+  useEffect(() => {
+    linkItems &&
+      location.pathname !== null &&
+      setSelected(itemOptions[linkItems.indexOf(location.pathname)]);
+  }, [location.pathname, linkItems, itemOptions]);
 
   return (
     <ToggleButtonGroup
@@ -31,11 +38,7 @@ function TabBar({ itemOptions, size, textSize, linkItems }) {
     >
       {itemOptions.map((value, index) => {
         const itemKey = index;
-        return linkItems ? (
-          <ToggleButton sx={{ fontSize: textSize }} key={itemKey} value={value}>
-            {value}
-          </ToggleButton>
-        ) : (
+        return (
           <ToggleButton sx={{ fontSize: textSize }} key={itemKey} value={value}>
             {value}
           </ToggleButton>

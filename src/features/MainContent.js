@@ -1,5 +1,5 @@
 import { Box, CssBaseline } from '@mui/material';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import SideBar from '../components/Sidebar';
 import TabBar from '../components/TabBar';
@@ -10,8 +10,10 @@ import TopNav from './TopNav';
 import { Route, Routes } from 'react-router-dom';
 import Grid from './grid/Grid';
 import Login from './login/Login';
+import Register from './registration/Register';
 import { auth } from '../firebase.js';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import AddEvent from './add-event/AddEvent';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -44,7 +46,6 @@ const tabItems = ['Map', 'List', 'Grid'];
 const linkItems = ['/', '/list', '/grid'];
 
 function MainContent() {
-  const theme = useTheme();
   const [open, setOpen] = useState(true);
   const [user] = useAuthState(auth);
 
@@ -62,25 +63,25 @@ function MainContent() {
         <>
           <CssBaseline />
           <TopNav open={open} handleDrawerOpen={handleDrawerOpen} />
-          <SideBar
-            theme={theme}
-            open={open}
-            handleDrawerClose={handleDrawerClose}
-          />
+          <SideBar open={open} handleDrawerClose={handleDrawerClose} />
           <Main open={open}>
             <DrawerHeader />
             <div style={Styles.tabBar}>
               <TabBar itemOptions={tabItems} linkItems={linkItems} />
             </div>
             <Routes>
-              <Route path="/" element={<Map />} />
-              <Route path="/list" element={<List />} />
-              <Route path="/grid" element={<Grid />} />
+              <Route path="*" element={<Map />} />
+              <Route path="/list" exact element={<List />} />
+              <Route path="/grid" exact element={<Grid />} />
+              <Route path="/list/add-event" exact element={<AddEvent />} />
             </Routes>
           </Main>
         </>
       ) : (
-        <Login />
+        <Routes>
+          <Route path="*" element={<Login />} />
+          <Route path="/sign-up" exact element={<Register />} />
+        </Routes>
       )}
     </Box>
   );

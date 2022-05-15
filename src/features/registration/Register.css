@@ -3,9 +3,11 @@
   height: 100vh;
 }
 
-.copyright-container {
+.copyright-container-register {
   position: absolute;
   bottom: 0;
+  right: 0;
   padding: 16px;
   color: #434343;
+  text-align: end;
 }

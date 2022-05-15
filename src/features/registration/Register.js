@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Card,
   CardActions,
@@ -6,37 +7,32 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
 import loginImageBg from '../../assets/images/login-bg.jpg';
-import './Login.css';
-import { auth, provider } from '../../firebase.js';
+import './Register.css';
+import { auth } from '../../firebase.js';
 import tmsLogo from '../../assets/images/tms-topbar-logo.png';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import Alert from '@mui/material/Alert';
 
-function Login() {
+function Register() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(null);
-  // Sign in with google
-  const signinWithGoogle = () => {
-    auth.signInWithPopup(provider).catch(alert);
-  };
 
-  const signIn = (e) => {
+  const signUp = (e) => {
     e.preventDefault();
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then(() => navigate('/', { replace: true }))
-      .catch(() => {
-        setError('Login Error: Incorrect Email or Password');
-      });
-  };
-
-  const signUp = () => {
-    navigate('/sign-up', { replace: true });
+    if (password !== confirmPassword) {
+      setError('Password does not matched!');
+    } else {
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then(() => {})
+        .catch((err) => {
+          setError(err.message.replace('Firebase', 'Error'));
+        });
+    }
   };
 
   return (
@@ -50,10 +46,12 @@ function Login() {
     >
       <Card
         sx={{
-          maxWidth: 300,
+          position: 'absolute',
+          width: 300,
           height: '100vh',
           textAlign: 'center',
           borderRadius: 0,
+          right: 0,
         }}
       >
         <CardContent>
@@ -65,7 +63,7 @@ function Login() {
           </Alert>
         )}
         <CardContent>
-          <form onSubmit={signIn} autoComplete="off">
+          <form onSubmit={signUp} autoComplete="off">
             <Stack spacing={2}>
               <TextField
                 id="email"
@@ -78,10 +76,19 @@ function Login() {
               <TextField
                 id="password"
                 label="Password"
-                type="password"
                 variant="outlined"
+                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <TextField
+                id="confirmPassword"
+                label="Confirm Password"
+                variant="outlined"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
             </Stack>
@@ -91,35 +98,22 @@ function Login() {
               variant="contained"
               type="submit"
             >
-              Sign-In
-            </Button>
-
-            <Button
-              sx={{ width: '100%', fontWeight: 'bold', mt: 2 }}
-              color="primary"
-              variant="outlined"
-              onClick={signUp}
-            >
               Sign-Up
             </Button>
           </form>
         </CardContent>
-        <center>
-          <b>OR</b>
-        </center>
         <CardActions>
           <Button
-            sx={{ width: '100%', fontWeight: 'bold', mx: 1, mt: 2 }}
-            color="error"
-            startIcon={<GoogleIcon />}
-            variant="contained"
-            onClick={signinWithGoogle}
+            sx={{ width: '100%', fontWeight: 'bold', mx: 1 }}
+            color="primary"
+            variant="outlined"
+            onClick={() => navigate('/login', { replace: true })}
           >
-            Sign-In with Google
+            Sign-In
           </Button>
         </CardActions>
       </Card>
-      <div className="copyright-container">
+      <div className="copyright-container-register">
         <div>
           <small>Traffic Management App</small>
         </div>
@@ -134,4 +128,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
