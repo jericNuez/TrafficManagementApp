@@ -12,7 +12,6 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import RangeSlider from './RangeSlider';
 import CustomDatePicker from './CustomDatePicker';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
@@ -88,30 +87,6 @@ function SideBar({ open, handleDrawerClose }) {
           />
         </FormGroup>
       </Box>
-      {/* <Box sx={{ margin: '23px' }}>
-        <Typography
-          sx={{ fontWeight: 'bold' }}
-          variant="subtitle1"
-          component="div"
-        >
-          Review Status
-        </Typography>
-        <TabBar
-          size="small"
-          textSize="10px"
-          itemOptions={reviewStatusOptions}
-        />
-      </Box> */}
-      {/* <Box sx={{ margin: '23px' }}>
-        <Typography
-          sx={{ fontWeight: 'bold' }}
-          variant="subtitle1"
-          component="div"
-        >
-          Time of Day
-        </Typography>
-        <RangeSlider />
-      </Box> */}
       <Box sx={{ margin: '23px' }}>
         <Typography
           sx={{ fontWeight: 'bold' }}
