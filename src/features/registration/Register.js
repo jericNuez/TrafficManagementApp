@@ -118,9 +118,6 @@ function Register() {
           <small>Traffic Management App</small>
         </div>
         <div>
-          <small>Created by: Jeric Nuez</small>
-        </div>
-        <div>
           <small>&copy; 2022</small>
         </div>
       </div>
