@@ -1,7 +1,6 @@
 import { Box, CssBaseline } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
-import SideBar from '../components/Sidebar';
 import TabBar from '../components/TabBar';
 import { Defaults } from '../constants/Defaults';
 import List from './list/List';
@@ -46,16 +45,16 @@ const tabItems = ['Map', 'List', 'Grid'];
 const linkItems = ['/', '/list', '/grid'];
 
 function MainContent() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [user] = useAuthState(auth);
 
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  // const handleDrawerClose = () => {
+  //   setOpen(false);
+  // };
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -63,7 +62,7 @@ function MainContent() {
         <>
           <CssBaseline />
           <TopNav open={open} handleDrawerOpen={handleDrawerOpen} />
-          <SideBar open={open} handleDrawerClose={handleDrawerClose} />
+          {/* <SideBar open={open} handleDrawerClose={handleDrawerClose} /> */}
           <Main open={open}>
             <DrawerHeader />
             <div style={Styles.tabBar}>
