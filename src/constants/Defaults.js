@@ -1,3 +1,3 @@
 export const Defaults = {
-  DRAWER_WIDTH: 360,
+  DRAWER_WIDTH: 0,
 };

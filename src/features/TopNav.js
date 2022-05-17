@@ -4,7 +4,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { styled } from '@mui/material/styles';
 import { Defaults } from '../constants/Defaults';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import tmsLogo from '../assets/images/tms-topbar-logo.png';
 import { useState } from 'react';
 import { auth } from '../firebase.js';
@@ -46,14 +45,14 @@ function TopNav({ open, handleDrawerOpen }) {
   return (
     <AppBar color="secondary" position="fixed" open={open}>
       <Toolbar>
-        <IconButton
+        {/* <IconButton
           aria-label="open drawer"
           onClick={handleDrawerOpen}
           edge="start"
           sx={{ mr: 2, ...(open && { display: 'none' }) }}
         >
           <ChevronRightIcon />
-        </IconButton>
+        </IconButton> */}
         <img alt="tmsLogo" src={tmsLogo} />
         <span style={{ flex: 1 }}></span>
         <div>
